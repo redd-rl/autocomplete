@@ -80,10 +80,11 @@ def save_models(path=None):
 
     print("saving to:", path)
     #save for next use. pickle format: (key=model name, value=model)
-    pickle.dump({'words_model': WORDS_MODEL,
-                 'word_tuples_model': WORD_TUPLES_MODEL},
-                open(path, 'wb'),
-                protocol=2)
+    with open(path, 'wb') as handle:
+        pickle.dump({'words_model': WORDS_MODEL,
+                    'word_tuples_model': WORD_TUPLES_MODEL},
+                    handle,
+                    protocol=2)
 
 
 def load_models(load_path=None):
@@ -94,7 +95,8 @@ def load_models(load_path=None):
         load_path = os.path.join(os.path.dirname(__file__),
                                  'models_compressed.pkl')
     try:
-        models = pickle.load(open(load_path,'rb'))
+        with open(load_path,'rb') as handle:
+            models = pickle.load(handle)
 
         global WORDS_MODEL
         WORDS_MODEL = models['words_model']
